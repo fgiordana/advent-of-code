@@ -1,6 +1,8 @@
 use std::path::Path;
 
-use crate::day_01::{day_01, FILEPATH, TARGET_SUM};
+use crate::day_01::{day_01, FILEPATH};
+
+const EXPECTED_RESULT: i64 = 55776;
 
 #[test]
 fn input_file_exists() {
@@ -8,7 +10,7 @@ fn input_file_exists() {
 }
 
 #[test]
-fn sum_equals_target() {
-	let (x, y) = day_01().unwrap();
-	assert_eq!(x + y, TARGET_SUM);
+fn check_result() {
+	let result = day_01().unwrap();
+	assert_eq!(result, EXPECTED_RESULT);
 }

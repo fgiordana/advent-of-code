@@ -14,14 +14,8 @@ fn main() -> Result<()> {
 
     info!("DAY 01");
     match day_01() {
-        Ok((x, y)) => {
-            info!("x: {}, y: {}", x, y);
-            info!("x + y = {}", x + y);
-            info!("x * y = {}", x * y);
-        }
-        Err(e) => {
-            error!("ERROR: {}", e)
-        }
+        Ok(result) => info!("RESULT: {}", result),
+        Err(e) => error!("ERROR: {}", e)
     }
 
     Ok(())
