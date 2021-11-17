@@ -4,7 +4,7 @@ use log::{error, info};
 
 mod day_01;
 mod day_02;
-mod test;
+
 
 fn main() -> Result<()> {
     Logger::try_with_str("info")?.start()?;
@@ -22,5 +22,15 @@ fn main() -> Result<()> {
         Ok(result) => info!("RESULT: {}", result),
         Err(e) => error!("ERROR: {}", e),
     }
-    Ok(())
+	info!("");
+
+	info!("DAY 02");
+	info!("Part 1");
+	match day_02::part1() {
+		Ok(result) => info!("RESULT: {}", result),
+		Err(e) => error!("ERROR: {}", e),
+	}
+	info!("");
+	
+	Ok(())
 }

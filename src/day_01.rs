@@ -3,8 +3,8 @@ use itertools::Itertools;
 use log::info;
 use std::fs;
 
-pub const FILEPATH: &str = "data/day_01/input.txt";
-pub const TARGET_SUM: i64 = 2020;
+const FILEPATH: &str = "data/day_01/input.txt";
+const TARGET_SUM: i64 = 2020;
 
 pub fn part1() -> Result<i64> {
     let (x, y) = fs::read_to_string(FILEPATH)?
@@ -38,4 +38,33 @@ pub fn part2() -> Result<i64> {
     info!("x * y + z = {}", x * y * z);
 
     Ok(x * y * z)
+}
+
+
+#[cfg(test)]
+mod tests {
+	use std::path::Path;
+
+	use super::*;
+
+	const PART1_RESULT: i64 = 55776;
+	const PART2_RESULT: i64 = 223162626;
+
+
+	#[test]
+	fn input_file_exists() {
+    	assert!(Path::new(FILEPATH).exists());
+	}
+
+	#[test]
+	fn check_part1() {
+	    let result = part1().unwrap();
+	    assert_eq!(result, PART1_RESULT);
+	}
+
+	#[test]
+	fn check_part2() {
+	    let result = part2().unwrap();
+	    assert_eq!(result, PART2_RESULT);
+	}
 }
