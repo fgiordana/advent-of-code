@@ -40,31 +40,29 @@ pub fn part2() -> Result<i64> {
     Ok(x * y * z)
 }
 
-
 #[cfg(test)]
 mod tests {
-	use std::path::Path;
+    use std::path::Path;
 
-	use super::*;
+    use super::*;
 
-	const PART1_RESULT: i64 = 55776;
-	const PART2_RESULT: i64 = 223162626;
+    const PART1_RESULT: i64 = 55776;
+    const PART2_RESULT: i64 = 223162626;
 
+    #[test]
+    fn input_file_exists() {
+        assert!(Path::new(FILEPATH).exists());
+    }
 
-	#[test]
-	fn input_file_exists() {
-    	assert!(Path::new(FILEPATH).exists());
-	}
+    #[test]
+    fn check_part1() {
+        let result = part1().unwrap();
+        assert_eq!(result, PART1_RESULT);
+    }
 
-	#[test]
-	fn check_part1() {
-	    let result = part1().unwrap();
-	    assert_eq!(result, PART1_RESULT);
-	}
-
-	#[test]
-	fn check_part2() {
-	    let result = part2().unwrap();
-	    assert_eq!(result, PART2_RESULT);
-	}
+    #[test]
+    fn check_part2() {
+        let result = part2().unwrap();
+        assert_eq!(result, PART2_RESULT);
+    }
 }
