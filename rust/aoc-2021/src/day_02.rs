@@ -74,7 +74,7 @@ mod test {
     use super::*;
 
     const PART1_RESULT: u64 = 1938402;
-	const PART2_RESULT: u64 = 1947878632;
+    const PART2_RESULT: u64 = 1947878632;
 
     #[test]
     fn test_command_parsing() {
@@ -99,9 +99,9 @@ mod test {
         assert_eq!(result, PART1_RESULT);
     }
 
-	#[test]
-	fn check_part2() {
-		let result = part2().unwrap();
-		assert_eq!(result, PART2_RESULT);
-	}
+    #[test]
+    fn check_part2() {
+        let result = part2().unwrap();
+        assert_eq!(result, PART2_RESULT);
+    }
 }
