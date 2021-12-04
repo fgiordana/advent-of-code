@@ -5,6 +5,7 @@ use log::{error, info};
 mod day_01;
 mod day_02;
 mod day_03;
+mod day_04;
 
 fn main() -> Result<()> {
     Logger::try_with_str("info")?.start()?;
@@ -37,7 +38,7 @@ fn main() -> Result<()> {
     }
     info!("");
 
-	info!("DAY 03");
+    info!("DAY 03");
     info!("Part 1");
     match day_03::part1() {
         Ok(result) => info!("RESULT: {}", result),
@@ -45,6 +46,19 @@ fn main() -> Result<()> {
     }
     info!("Part 2");
     match day_03::part2() {
+        Ok(result) => info!("RESULT: {}", result),
+        Err(e) => info!("ERROR: {}", e),
+    }
+    info!("");
+
+    info!("DAY 04");
+    info!("Part 1");
+    match day_04::part1() {
+        Ok(result) => info!("RESULT: {}", result),
+        Err(e) => error!("ERROR: {}", e),
+    }
+    info!("Part 2");
+    match day_04::part2() {
         Ok(result) => info!("RESULT: {}", result),
         Err(e) => info!("ERROR: {}", e),
     }
