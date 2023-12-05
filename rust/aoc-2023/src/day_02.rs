@@ -20,6 +20,7 @@ const FILEPATH: &str = "data/day_02/input.txt";
 pub fn run() -> Result<()> {
     let input = fs::read_to_string(FILEPATH)?;
     println!("Part1: {}", part1(&SETUP, &input)?);
+    println!("Part2: {}", part2(&input)?);
     Ok(())
 }
 
@@ -31,6 +32,14 @@ pub fn part1(setup: &Setup, input: &str) -> Result<u32> {
             max.0 <= setup.red && max.1 <= setup.green && max.2 <= setup.blue
         })
         .map(|g| g.id)
+        .sum();
+    Ok(sum)
+}
+
+pub fn part2(input: &str) -> Result<u32> {
+    let sum = input.split('\n')
+        .map(|line| parse_game(line).unwrap()) 
+        .map(|g| g.power())
         .sum();
     Ok(sum)
 }
@@ -51,6 +60,11 @@ impl Game {
                     acc.2.max(set.2)
                 )
             })
+    }
+
+    pub fn power(&self) -> u32 {
+        let max = self.max();
+        max.0 * max.1 * max.2
     }
 }
 
@@ -224,7 +238,7 @@ mod test {
 
     use super::*;
 
-    const TEST_DATA_PART1: &str = 
+    const TEST_DATA: &str = 
         "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green\n\
          Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue\n\
          Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red\n\
@@ -234,8 +248,16 @@ mod test {
     #[test]
     fn test_part1() {
         assert_eq!(
-            part1(&SETUP, TEST_DATA_PART1).unwrap(),
+            part1(&SETUP, TEST_DATA).unwrap(),
             8,
+        );
+    }
+
+    #[test]
+    fn test_part2() {
+        assert_eq!(
+            part2(TEST_DATA).unwrap(),
+            2286
         );
     }
 
@@ -276,5 +298,27 @@ mod test {
                 sets: vec![(6, 3, 1), (1, 2, 2)]
             }
         );
+    }
+
+    #[test]
+    fn test_max() {
+        assert_eq!(
+            Game{
+                id: 1,
+                sets: vec![(4, 0, 3), (1, 2, 6), (0, 2, 0)]
+            }.max(),
+            (4, 2, 6)
+        );
+    }
+
+    #[test]
+    fn test_power() {
+        assert_eq!(
+            Game{
+                id: 1,
+                sets: vec![(4, 0, 3), (1, 2, 6), (0, 2, 0)]
+            }.power(),
+            48
+        ); 
     }
 }
