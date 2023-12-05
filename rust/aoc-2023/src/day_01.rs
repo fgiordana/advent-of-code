@@ -93,14 +93,14 @@ mod test {
         )
     }
 
-    const TEST_DATA_PART2: &str = "\
-        two1nine\n\
-        eightwothree\n\
-        abcone2threexyz\n\
-        xtwone3four\n\
-        4nineeightseven2\n\
-        zoneight234\n\
-        7pqrstsixteen";
+    const TEST_DATA_PART2: &str = 
+        "two1nine\n\
+         eightwothree\n\
+         abcone2threexyz\n\
+         xtwone3four\n\
+         4nineeightseven2\n\
+         zoneight234\n\
+         7pqrstsixteen";
     
     #[test]
     fn test_part2() {
