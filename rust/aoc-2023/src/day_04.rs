@@ -1,4 +1,4 @@
-use std::fs;
+use std::{fs, collections::VecDeque};
 
 use anyhow::Result;
 
@@ -9,6 +9,7 @@ const FILEPATH: &str = "data/day_04/input.txt";
 pub fn run() -> Result<()> {
     let input = fs::read_to_string(FILEPATH)?;
     println!("Part1: {}", part1(&input)?);
+    println!("Part2: {}", part2(&input)?);
     Ok(())
 }
 
@@ -19,6 +20,31 @@ pub fn part1(input: &str) -> Result<u32> {
         .sum::<u32>();
 
     Ok(result)
+}
+
+pub fn part2(input: &str) -> Result<u32> {
+    let cards = input.split('\n')
+        .map(Card::new)
+        .collect::<Vec<_>>();
+
+    let wins = cards.iter()
+        .map(|c| c.wins())
+        .collect::<Vec<_>>();
+
+    let mut total = cards.len() as u32;
+    let mut total_cards = cards.iter()
+        .map(|c| c.id)
+        .collect::<VecDeque<_>>();
+
+    while let Some(id) = total_cards.pop_front() {
+        let wins = &wins[id as usize - 1];
+        total += wins.len() as u32;
+        for c in wins {
+            total_cards.push_back(*c);
+        }
+    }
+
+    Ok(total)
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -34,15 +60,26 @@ impl Card {
         card
     }
 
-    pub fn score(&self) -> u32 {
-        let n = self.numbers
+    pub fn matches(&self) -> usize {
+        self.numbers
             .iter()
             .filter(|n| self.winners.contains(n))
-            .count();
+            .count()
+    }
+
+    pub fn score(&self) -> u32 {
+        let n = self.matches();
         match n {
             0 => 0,
             _ => 2u32.pow(n as u32 - 1)
         }
+    }
+
+    pub fn wins(&self) -> Vec<u32> {
+        let n = self.matches();
+        (1..n+1)
+            .map(|idx| self.id + idx as u32)
+            .collect::<Vec<_>>()
     }
 }
 
@@ -157,6 +194,14 @@ mod test {
     }
 
     #[test]
+    fn test_part2() {
+        assert_eq!(
+            part2(TEST_DATA).unwrap(),
+            30
+        );
+    }
+
+    #[test]
     fn test_parse_card() {
         assert_eq!(
             Card::new("Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53"),
@@ -173,6 +218,14 @@ mod test {
         assert_eq!(
             Card::new("Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53").score(),
             8
+        );
+    }
+
+    #[test]
+    fn test_wins() {
+        assert_eq!(
+            Card::new("Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53").wins(),
+            vec![2, 3, 4, 5]
         );
     }
 }
