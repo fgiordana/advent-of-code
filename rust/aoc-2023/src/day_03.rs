@@ -9,6 +9,7 @@ const FILEPATH: &str = "data/day_03/input.txt";
 pub fn run() -> Result<()> {
     let input = fs::read_to_string(FILEPATH)?;
     println!("Part1: {}", part1(&input)?);
+    println!("Part2: {}", part2(&input)?);
     Ok(())
 }
 
@@ -18,6 +19,17 @@ pub fn part1(input: &str) -> Result<u32> {
         .map(|p| p.id)
         .sum::<u32>();
     Ok(result)
+}
+
+pub fn part2(input: &str) -> Result<u32> {
+    let diagram = Diagram::new(input);
+    let result = diagram.get_gears()
+        .iter()
+        .map(|parts| parts.iter()
+            .fold(1, |acc, &part| acc * part.id)
+        ).sum::<u32>();
+    Ok(result)
+        
 }
 
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -119,6 +131,30 @@ impl Diagram {
             .cloned()
             .collect::<Vec<_>>()
     }
+
+    pub fn get_gears(&self) -> Vec<Vec<&Part>> {
+        self.lines.iter()
+            .enumerate()
+            .flat_map(|(idx, l)| l.symbols.iter()
+                .filter(|&s| s.id == '*')
+                .map(move |s| (s.pos, idx as u32)))
+            .map(|(x, y)| {
+                let mut indices = vec![];
+                if y > 0 {
+                    indices.push(y as usize - 1);
+                }
+                indices.push(y as usize);
+                if y < self.lines.len() as u32 - 1 {
+                    indices.push(y as usize + 1);
+                }
+                indices.iter()
+                    .flat_map(|&y| self.lines[y].parts.iter())
+                    .filter(|&p| is_adjacent(&p.bounds, &x))
+                    .collect::<Vec<_>>()
+            })
+            .filter(|parts| parts.len() == 2)
+            .collect::<Vec<_>>() 
+    }
 }
 
 fn is_adjacent(bounds: &(u32, u32), pos: &u32) -> bool {
@@ -146,6 +182,14 @@ mod test {
         assert_eq!(
             part1(TEST_DATA).unwrap(),
             4361
+        );
+    }
+
+    #[test]
+    fn test_part2() {
+        assert_eq!(
+            part2(TEST_DATA).unwrap(),
+            467835
         );
     }
 
@@ -252,6 +296,21 @@ mod test {
     }
 
     #[test]
+    fn test_gears() {
+        let diagram = Diagram::new(TEST_DATA);
+        assert_eq!(
+            diagram.get_gears()
+                .iter()
+                .map(|parts| parts.iter().map(|p| p.id).collect::<Vec<_>>())
+                .collect::<Vec<_>>(),
+            vec![
+                vec![467, 35],
+                vec![755, 598],
+            ]
+        )
+    }
+
+    #[test]
     fn test_2() {
         const DATA: &str = 
             ".....210................356..*.........977.68.........38.......835.622.332.....*300.....131.422..............89..*.....+..........$.........\n\
@@ -284,5 +343,4 @@ mod test {
             vec![356, 977, 835, 926, 529, 467, 423, 143, 955]
         );
     }
-
 }
